@@ -1,7 +1,10 @@
 import http from 'http';
 
+import { configuration } from './config.js';
+
+const { port } = configuration.server;
+
 const hostname = '127.0.0.1';
-const port = 3000;
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
