@@ -5,6 +5,9 @@ import { ErrorResponse } from '../types.js';
 
 export const app = express();
 
+// Parse JSON
+app.use(express.json());
+
 // Setup API routes
 app.use('/api', api);
 app.use('/api/v1', api);

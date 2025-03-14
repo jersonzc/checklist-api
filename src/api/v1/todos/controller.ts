@@ -5,7 +5,8 @@ export const create = (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  res.json({});
+  const { body = {} } = req;
+  res.json({ data: body });
 };
 
 export const all = (
