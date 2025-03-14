@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import * as controller from './controller.js';
 
 export const router = Router();
 
@@ -10,13 +11,10 @@ export const router = Router();
  * /api/todos/:id DELETE - Delete
  */
 
-router
-  .route('/')
-  .post((req, res, next) => {})
-  .get((req, res, next) => {});
+router.route('/').post(controller.create).get(controller.all);
 
 router
   .route('/:id')
-  .get((req, res, next) => {})
-  .put((req, res, next) => {})
-  .delete((req, res, next) => {});
+  .get(controller.one)
+  .put(controller.update)
+  .delete(controller.remove);
