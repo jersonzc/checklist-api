@@ -1,12 +1,13 @@
 import express, { NextFunction } from 'express';
 
-import { router as api } from '../api/index.js';
+import { router as api } from '../api/v1/index.js';
 import { ErrorResponse } from '../types.js';
 
 export const app = express();
 
 // Setup API routes
 app.use('/api', api);
+app.use('/api/v1', api);
 
 // No route found
 app.use((req, res, next) => {
