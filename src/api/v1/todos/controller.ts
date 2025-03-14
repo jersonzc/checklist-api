@@ -21,7 +21,13 @@ export const one = (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  res.json({});
+  const { params = {} } = req;
+  const { id = '' } = params;
+  res.json({
+    data: {
+      id,
+    },
+  });
 };
 
 export const update = (
