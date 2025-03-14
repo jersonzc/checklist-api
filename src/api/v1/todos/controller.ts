@@ -1,12 +1,18 @@
 import express from 'express';
+import { prisma } from '../../../app/database.js';
 
-export const create = (
+export const create = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
 ) => {
   const { body = {} } = req;
-  res.json({ data: body });
+  try {
+    const data = await prisma.todo.create({ data: body });
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const all = (
