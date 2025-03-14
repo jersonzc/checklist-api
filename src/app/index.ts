@@ -1,6 +1,7 @@
 import express, { NextFunction } from 'express';
 
 import { router as api } from '../api/index.js';
+import { ErrorResponse } from '../types.js';
 
 export const app = express();
 
@@ -18,7 +19,7 @@ app.use((req, res, next) => {
 // Error handler
 app.use(
   (
-    err: Error,
+    err: ErrorResponse,
     req: express.Request,
     res: express.Response,
     next: NextFunction,
