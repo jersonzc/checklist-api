@@ -1,17 +1,13 @@
-import express from 'express';
+import http from 'http';
 
+import { app } from './app/index.js';
 import { configuration } from './config.js';
 
+const hostname = '127.0.0.1';
 const { port } = configuration.server;
 
-const hostname = '127.0.0.1';
+const server = http.createServer(app);
 
-const app = express();
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-app.listen(port, () => {
+server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
