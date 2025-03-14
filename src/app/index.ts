@@ -1,10 +1,11 @@
 import express, { NextFunction } from 'express';
 
+import { router as api } from '../api/index.js';
+
 export const app = express();
 
-app.get('/', (req, res, next) => {
-  res.json({ message: 'Welcome to the API' });
-});
+// Setup API routes
+app.use('/api', api);
 
 // No route found
 app.use((req, res, next) => {
