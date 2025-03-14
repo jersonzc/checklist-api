@@ -13,7 +13,14 @@ export const all = (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  res.json({});
+  const { query = {} } = req;
+  const { limit = 10, offset = 0 } = query;
+  res.json({
+    meta: {
+      limit,
+      offset,
+    },
+  });
 };
 
 export const one = (
