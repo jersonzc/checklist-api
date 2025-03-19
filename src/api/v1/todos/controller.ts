@@ -95,10 +95,28 @@ export const update = async (
   }
 };
 
-export const remove = (
+export const remove = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  res.json({});
+  const { params = {} } = req;
+  const { id = '' } = params;
+
+  try {
+    const data = await prisma.todo.delete({
+      where: { id },
+    });
+
+    if (data === null) {
+      return next({
+        message: 'todo not found',
+        status: 404,
+      });
+    }
+
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
 };
