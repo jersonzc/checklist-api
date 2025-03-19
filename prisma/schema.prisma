@@ -21,4 +21,29 @@ model Todo {
   dueDate DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  group Group? @relation(fields: [groupId], references: [id])
+  groupId String?
+}
+
+model Group {
+  id String @id @default(uuid())
+  title String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  todos Todo[]
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  todos Todo[]
+  groups Group[]
 }

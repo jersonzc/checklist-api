@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import * as controller from './controller.js';
 
-export const router = Router({ mergeParams: true });
+export const router = Router();
 
 /*
- * /api/todos/ POST - Create
- * /api/todos/ GET - Read all
- * /api/todos/:id GET - Read one
- * /api/todos/:id PUT - Update
- * /api/todos/:id DELETE - Delete
+ * /api/users/ POST - Create
+ * /api/users/ GET - Read all
+ * /api/users/:id GET - Read one
+ * /api/users/:id PUT - Update
+ * /api/users/:id DELETE - Delete
  */
 
 router.route('/').post(controller.create).get(controller.all);

@@ -10,7 +10,7 @@ export const create = async (
 ) => {
   const { body = {} } = req;
   try {
-    const data = await prisma.todo.create({ data: body });
+    const data = await prisma.user.create({ data: body });
     res.json({ data });
   } catch (error) {
     next(error);
@@ -22,33 +22,20 @@ export const all = async (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  const { query = {}, params = {} } = req;
+  const { query = {} } = req;
   const { limit, offset } = parsePaginationParams(query);
   const { orderBy, direction } = parseSortParams({ fields, ...query });
-  const { groupId } = params;
 
   try {
     const [data, total] = await Promise.all([
-      prisma.todo.findMany({
+      prisma.user.findMany({
         skip: offset,
         take: limit,
         orderBy: {
           [orderBy]: direction,
         },
-        where: {
-          groupId,
-        },
-        include: {
-          user: {
-            select: {
-              name: true,
-            },
-          },
-        },
       }),
-      prisma.todo.count({
-        where: { groupId },
-      }),
+      prisma.user.count(),
     ]);
 
     res.json({
@@ -75,12 +62,12 @@ export const id = async (
   const { id = '' } = params;
 
   try {
-    const data = await prisma.todo.findUnique({
+    const data = await prisma.user.findUnique({
       where: { id },
     });
     if (data === null) {
       return next({
-        message: 'todo not found',
+        message: 'user not found',
         status: 404,
       });
     } else {
@@ -112,7 +99,7 @@ export const update = async (
   const { id = '' } = params;
 
   try {
-    const data = await prisma.todo.update({
+    const data = await prisma.user.update({
       where: { id },
       data: { ...body, updatedAt: new Date() },
     });
@@ -131,7 +118,7 @@ export const remove = async (
   const { id = '' } = params;
 
   try {
-    await prisma.todo.delete({
+    await prisma.user.delete({
       where: { id },
     });
 
