@@ -29,7 +29,13 @@ export const all = async (
       skip: offset,
       take: limit,
     });
-    res.json({ data });
+    res.json({
+      data,
+      meta: {
+        limit,
+        offset,
+      },
+    });
   } catch (error) {
     next(error);
   }
