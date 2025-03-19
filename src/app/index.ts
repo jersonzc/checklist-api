@@ -21,10 +21,17 @@ app.use((req, res, next) => {
 });
 
 // Error handler
-app.use((err: ErrorResponse, req: express.Request, res: express.Response) => {
-  const { status = 500, message } = err;
-  res.status(status);
-  res.json({
-    error: { status, message },
-  });
-});
+app.use(
+  (
+    err: ErrorResponse,
+    req: express.Request,
+    res: express.Response,
+    next: NextFunction,
+  ) => {
+    const { status = 500, message } = err;
+    res.status(status);
+    res.json({
+      error: { status, message },
+    });
+  },
+);
