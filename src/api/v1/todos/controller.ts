@@ -46,18 +46,28 @@ export const all = async (
   }
 };
 
-export const one = (
+export const one = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
 ) => {
   const { params = {} } = req;
   const { id = '' } = params;
-  res.json({
-    data: {
-      id,
-    },
-  });
+
+  try {
+    const data = await prisma.todo.findUnique({
+      where: { id },
+    });
+    if (data === null) {
+      return next({
+        message: 'todo not found',
+        status: 404,
+      });
+    }
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const update = (
