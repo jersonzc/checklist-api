@@ -2,6 +2,12 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+interface SortConfig {
+  direction: string;
+  orderBy: string;
+  options: string[];
+}
+
 interface PaginationConfig {
   limit: number;
   offset: number;
@@ -14,6 +20,7 @@ interface ServerConfig {
 interface GlobalConfig {
   server: ServerConfig;
   pagination: PaginationConfig;
+  order: SortConfig;
 }
 
 export const configuration: GlobalConfig = {
@@ -23,5 +30,10 @@ export const configuration: GlobalConfig = {
   pagination: {
     limit: 10,
     offset: 0,
+  },
+  order: {
+    direction: 'desc',
+    orderBy: 'createdAt',
+    options: ['asc', 'desc'],
   },
 };

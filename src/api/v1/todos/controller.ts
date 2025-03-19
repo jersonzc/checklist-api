@@ -1,6 +1,7 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
-import { parsePaginationParams } from '../../../app/utils.js';
+import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
+import { fields } from './model.js';
 
 export const create = async (
   req: express.Request,
@@ -23,12 +24,16 @@ export const all = async (
 ) => {
   const { query = {} } = req;
   const { limit, offset } = parsePaginationParams(query);
+  const { orderBy, direction } = parseSortParams({ fields, ...query });
 
   try {
     const [data, total] = await Promise.all([
       prisma.todo.findMany({
         skip: offset,
         take: limit,
+        orderBy: {
+          [orderBy]: direction,
+        },
       }),
       prisma.todo.count(),
     ]);
@@ -39,6 +44,8 @@ export const all = async (
         limit,
         offset,
         total,
+        orderBy,
+        direction,
       },
     });
   } catch (error) {
