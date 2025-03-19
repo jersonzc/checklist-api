@@ -46,7 +46,7 @@ export const all = async (
   }
 };
 
-export const one = async (
+export const id = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
@@ -63,11 +63,24 @@ export const one = async (
         message: 'todo not found',
         status: 404,
       });
+    } else {
+      res.locals.data = data;
+      next();
     }
-    res.json({ data });
   } catch (error) {
     next(error);
   }
+};
+
+export const one = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  const { locals = {} } = res;
+  const { data } = locals;
+
+  res.json({ data });
 };
 
 export const update = async (
@@ -83,12 +96,6 @@ export const update = async (
       where: { id },
       data: { ...body, updatedAt: new Date() },
     });
-    if (data === null) {
-      return next({
-        message: 'todo not found',
-        status: 404,
-      });
-    }
     res.json({ data });
   } catch (error) {
     next(error);
@@ -104,16 +111,9 @@ export const remove = async (
   const { id = '' } = params;
 
   try {
-    const data = await prisma.todo.delete({
+    await prisma.todo.delete({
       where: { id },
     });
-
-    if (data === null) {
-      return next({
-        message: 'todo not found',
-        status: 404,
-      });
-    }
 
     res.status(204).end();
   } catch (error) {
