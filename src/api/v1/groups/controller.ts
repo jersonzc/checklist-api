@@ -79,11 +79,7 @@ export const id = async (
   }
 };
 
-export const one = async (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
+export const one = async (req: express.Request, res: express.Response) => {
   const { locals = {} } = res;
   const { data } = locals;
 
