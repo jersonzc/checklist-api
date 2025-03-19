@@ -25,15 +25,20 @@ export const all = async (
   const { limit, offset } = parsePaginationParams(query);
 
   try {
-    const data = await prisma.todo.findMany({
-      skip: offset,
-      take: limit,
-    });
+    const [data, total] = await Promise.all([
+      prisma.todo.findMany({
+        skip: offset,
+        take: limit,
+      }),
+      prisma.todo.count(),
+    ]);
+
     res.json({
       data,
       meta: {
         limit,
         offset,
+        total,
       },
     });
   } catch (error) {
