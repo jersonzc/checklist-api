@@ -1,5 +1,6 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
+import { parsePaginationParams } from '../../../app/utils.js';
 
 export const create = async (
   req: express.Request,
@@ -15,19 +16,23 @@ export const create = async (
   }
 };
 
-export const all = (
+export const all = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
 ) => {
   const { query = {} } = req;
-  const { limit = 10, offset = 0 } = query;
-  res.json({
-    meta: {
-      limit,
-      offset,
-    },
-  });
+  const { limit, offset } = parsePaginationParams(query);
+
+  try {
+    const data = await prisma.todo.findMany({
+      skip: offset,
+      take: limit,
+    });
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const one = (
