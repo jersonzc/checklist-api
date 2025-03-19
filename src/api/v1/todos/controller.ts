@@ -70,12 +70,29 @@ export const one = async (
   }
 };
 
-export const update = (
+export const update = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  res.json({});
+  const { body = {}, params = {} } = req;
+  const { id = '' } = params;
+
+  try {
+    const data = await prisma.todo.update({
+      where: { id },
+      data: { ...body, updatedAt: new Date() },
+    });
+    if (data === null) {
+      return next({
+        message: 'todo not found',
+        status: 404,
+      });
+    }
+    res.json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const remove = (
