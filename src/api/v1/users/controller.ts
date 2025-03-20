@@ -1,7 +1,7 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
-import { fields } from './model.js';
+import { encryptPassword, fields } from './model.js';
 
 export const create = async (
   req: express.Request,
@@ -10,7 +10,11 @@ export const create = async (
 ) => {
   const { body = {} } = req;
   try {
-    const data = await prisma.user.create({ data: body });
+    const password = await encryptPassword(body.password);
+    const data = await prisma.user.create({
+      data: { ...body, password },
+      select: { name: true, email: true },
+    });
     res.json({ data });
   } catch (error) {
     next(error);
