@@ -1,7 +1,7 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
-import { encryptPassword, fields } from './model.js';
+import { encryptPassword, fields, verifyPassword } from './model.js';
 
 export const create = async (
   req: express.Request,
@@ -127,6 +127,44 @@ export const remove = async (
     });
 
     res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signin = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  const { body = {} } = req;
+  const { email = '', password } = body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { name: true, email: true, password: true },
+    });
+    if (!user) {
+      return next({
+        status: 404,
+        message: 'invalid email',
+      });
+    }
+
+    const passwordMatch = await verifyPassword(password, user.password);
+    if (!passwordMatch) {
+      return next({
+        status: 404,
+        message: 'invalid password',
+      });
+    }
+
+    res.json({
+      data: {
+        ...user,
+        password: undefined,
+      },
+    });
   } catch (error) {
     next(error);
   }
