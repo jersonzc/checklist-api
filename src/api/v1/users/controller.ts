@@ -39,6 +39,7 @@ export const all = async (
         orderBy: {
           [orderBy]: direction,
         },
+        select: { id: true, name: true },
       }),
       prisma.user.count(),
     ]);
