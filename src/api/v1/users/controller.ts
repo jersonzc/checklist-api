@@ -2,6 +2,7 @@ import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
 import { encryptPassword, fields, verifyPassword } from './model.js';
+import { signToken } from '../auth.js';
 
 export const create = async (
   req: express.Request,
@@ -159,10 +160,16 @@ export const signin = async (
       });
     }
 
+    const token = signToken({ id: user.id });
+
     res.json({
       data: {
         ...user,
         password: undefined,
+        id: undefined,
+      },
+      meta: {
+        token,
       },
     });
   } catch (error) {

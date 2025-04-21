@@ -17,10 +17,16 @@ interface ServerConfig {
   port: number;
 }
 
+interface TokenConfig {
+  secret: string;
+  expires: string;
+}
+
 interface GlobalConfig {
   server: ServerConfig;
   pagination: PaginationConfig;
   order: SortConfig;
+  token: TokenConfig;
 }
 
 export const configuration: GlobalConfig = {
@@ -35,5 +41,9 @@ export const configuration: GlobalConfig = {
     direction: 'desc',
     orderBy: 'createdAt',
     options: ['asc', 'desc'],
+  },
+  token: {
+    secret: process.env.TOKEN_SECRET || 'test',
+    expires: process.env.TOKEN_EXPIRES || '1h',
   },
 };
