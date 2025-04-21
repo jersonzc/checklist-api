@@ -1,4 +1,4 @@
-import express, { NextFunction } from 'express';
+import express from 'express';
 
 import { router as api } from '../api/v1/index.js';
 import { ErrorResponse } from '../types.js';
@@ -26,7 +26,7 @@ app.use(
     err: ErrorResponse,
     req: express.Request,
     res: express.Response,
-    next: NextFunction,
+    next: express.NextFunction,
   ) => {
     const { status = 500, message } = err;
     res.status(status);
