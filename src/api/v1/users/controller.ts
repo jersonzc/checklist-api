@@ -142,7 +142,7 @@ export const signin = async (
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-      select: { name: true, email: true, password: true },
+      select: { id: true, name: true, email: true, password: true },
     });
     if (!user) {
       return next({
