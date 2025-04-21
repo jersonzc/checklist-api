@@ -107,6 +107,7 @@ export const update = async (
     const data = await prisma.user.update({
       where: { id },
       data: { ...body, updatedAt: new Date() },
+      select: { name: true, email: true },
     });
     res.json({ data });
   } catch (error) {
