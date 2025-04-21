@@ -1,8 +1,14 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
-import { encryptPassword, fields, verifyPassword } from './model.js';
+import {
+  encryptPassword,
+  fields,
+  UserSchema,
+  verifyPassword,
+} from './model.js';
 import { signToken } from '../auth.js';
+import { ZodIssue } from 'zod';
 
 export const create = async (
   req: express.Request,
@@ -11,12 +17,26 @@ export const create = async (
 ) => {
   const { body = {} } = req;
   try {
+    const { success, error, data } = await UserSchema.safeParseAsync(body);
+
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+        error,
+      });
+    }
+
     const password = await encryptPassword(body.password);
-    const data = await prisma.user.create({
-      data: { ...body, password },
+    const user = await prisma.user.create({
+      data: { ...data, password },
       select: { name: true, email: true },
     });
-    res.json({ data });
+    res.json({ data: user });
   } catch (error) {
     next(error);
   }
