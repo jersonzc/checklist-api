@@ -9,8 +9,11 @@ export const create = async (
   next: express.NextFunction,
 ) => {
   const { body = {} } = req;
+  const { locals = {} } = res;
+  const { decoded = {} } = locals;
+  const { id: userId } = decoded;
   try {
-    const data = await prisma.group.create({ data: body });
+    const data = await prisma.group.create({ data: { ...body, userId } });
     res.json({ data });
   } catch (error) {
     next(error);

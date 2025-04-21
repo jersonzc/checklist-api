@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as controller from './controller.js';
+import { auth, me } from '../auth.js';
 
 export const router = Router();
 
@@ -20,6 +21,6 @@ router.param('id', controller.id);
 
 router
   .route('/:id')
-  .get(controller.one)
-  .put(controller.update)
-  .delete(controller.remove);
+  .get(auth, me, controller.one)
+  .put(auth, me, controller.update)
+  .delete(auth, me, controller.remove);

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as controller from './controller.js';
+import { auth, owner } from '../auth.js';
 
 export const router = Router({ mergeParams: true });
 
@@ -11,12 +12,12 @@ export const router = Router({ mergeParams: true });
  * /api/todos/:id DELETE - Delete
  */
 
-router.route('/').post(controller.create).get(controller.all);
+router.route('/').post(auth, controller.create).get(controller.all);
 
 router.param('id', controller.id);
 
 router
   .route('/:id')
   .get(controller.one)
-  .put(controller.update)
-  .delete(controller.remove);
+  .put(auth, owner, controller.update)
+  .delete(auth, owner, controller.remove);

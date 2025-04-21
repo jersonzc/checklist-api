@@ -16,7 +16,7 @@ app.use('/api/v1', api);
 app.use((req, res, next) => {
   next({
     status: 404,
-    message: 'Error. Route not found!',
+    message: 'route not found',
   });
 });
 
