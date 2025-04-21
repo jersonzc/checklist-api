@@ -154,7 +154,7 @@ export const signin = async (
     const passwordMatch = await verifyPassword(password, user.password);
     if (!passwordMatch) {
       return next({
-        status: 404,
+        status: 404, // we use 404 to avoid confirming the existence of a user
         message: 'invalid password',
       });
     }
