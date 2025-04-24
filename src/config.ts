@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import ms, { StringValue } from 'ms';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ interface ServerConfig {
 
 interface TokenConfig {
   secret: string;
-  expires: string;
+  expires: ms.StringValue;
 }
 
 interface GlobalConfig {
@@ -44,6 +45,6 @@ export const configuration: GlobalConfig = {
   },
   token: {
     secret: process.env.TOKEN_SECRET || 'test',
-    expires: process.env.TOKEN_EXPIRES || '1h',
+    expires: (process.env.TOKEN_EXPIRES || '1h') as StringValue,
   },
 };

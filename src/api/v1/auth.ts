@@ -3,11 +3,12 @@ import jwt from 'jsonwebtoken';
 
 import { configuration } from '../../config.js';
 import express from 'express';
+import { StringValue } from 'ms';
 
 const { token } = configuration;
 const { secret, expires } = token;
 
-export const signToken = (payload: Payload, expiresIn: string = expires) =>
+export const signToken = (payload: Payload, expiresIn: StringValue = expires) =>
   jwt.sign(payload, secret, {
     algorithm: 'HS256',
     expiresIn,
