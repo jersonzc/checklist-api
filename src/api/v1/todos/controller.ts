@@ -1,7 +1,8 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
-import { fields } from './model.js';
+import { fields, TodoSchema } from './model.js';
+import { ZodIssue } from 'zod';
 
 export const create = async (
   req: express.Request,
@@ -13,8 +14,21 @@ export const create = async (
   const { decoded = {} } = locals;
   const { id: userId } = decoded;
   try {
-    const data = await prisma.todo.create({ data: { ...body, userId } });
-    res.json({ data });
+    const { success, error, data } = await TodoSchema.safeParseAsync(body);
+
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+      });
+    }
+
+    const todo = await prisma.todo.create({ data: { ...data, userId } });
+    res.json({ data: todo });
   } catch (error) {
     next(error);
   }
@@ -115,11 +129,32 @@ export const update = async (
   const { id = '' } = params;
 
   try {
-    const data = await prisma.todo.update({
+    const { success, error, data } =
+      await TodoSchema.partial().safeParseAsync(body);
+
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+      });
+    }
+
+    const todo = await prisma.todo.update({
       where: { id },
-      data: { ...body, updatedAt: new Date() },
+      data: { ...data, updatedAt: new Date() },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
-    res.json({ data });
+    res.json({ data: todo });
   } catch (error) {
     next(error);
   }
