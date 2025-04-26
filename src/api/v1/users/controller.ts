@@ -4,6 +4,7 @@ import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
 import {
   encryptPassword,
   fields,
+  LoginSchema,
   UserSchema,
   verifyPassword,
 } from './model.js';
@@ -125,12 +126,28 @@ export const update = async (
   const { id = '' } = params;
 
   try {
-    const data = await prisma.user.update({
+    const { success, error, data } =
+      await UserSchema.partial().safeParseAsync(body);
+
+    console.log(error);
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+        error,
+      });
+    }
+
+    const user = await prisma.user.update({
       where: { id },
-      data: { ...body, updatedAt: new Date() },
+      data: { ...data, updatedAt: new Date() },
       select: { name: true, email: true },
     });
-    res.json({ data });
+    res.json({ data: user });
   } catch (error) {
     next(error);
   }
@@ -161,8 +178,24 @@ export const signin = async (
   next: express.NextFunction,
 ) => {
   const { body = {} } = req;
-  const { email = '', password } = body;
+
   try {
+    const { success, error, data } = await LoginSchema.safeParseAsync(body);
+
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+        error,
+      });
+    }
+
+    const { email = '', password } = data;
+
     const user = await prisma.user.findUnique({
       where: { email },
       select: { id: true, name: true, email: true, password: true },
