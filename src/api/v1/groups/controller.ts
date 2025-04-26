@@ -2,7 +2,6 @@ import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
 import { fields, GroupSchema } from './model.js';
-import { UserSchema } from '../users/model.js';
 import { ZodIssue } from 'zod';
 
 export const create = async (
