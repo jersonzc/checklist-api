@@ -1,7 +1,9 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
 import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
-import { fields } from './model.js';
+import { fields, GroupSchema } from './model.js';
+import { UserSchema } from '../users/model.js';
+import { ZodIssue } from 'zod';
 
 export const create = async (
   req: express.Request,
@@ -13,8 +15,22 @@ export const create = async (
   const { decoded = {} } = locals;
   const { id: userId } = decoded;
   try {
-    const data = await prisma.group.create({ data: { ...body, userId } });
-    res.json({ data });
+    const { success, error, data } = await GroupSchema.safeParseAsync(body);
+
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+        error,
+      });
+    }
+
+    const group = await prisma.group.create({ data: { ...data, userId } });
+    res.json({ data: group });
   } catch (error) {
     next(error);
   }
@@ -109,11 +125,33 @@ export const update = async (
   const { id = '' } = params;
 
   try {
-    const data = await prisma.group.update({
+    const { success, error, data } =
+      await GroupSchema.partial().safeParseAsync(body);
+
+    const errorMessage = error
+      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      : '';
+
+    if (!success) {
+      return next({
+        message: `validation error: ${errorMessage}`,
+        status: 400,
+        error,
+      });
+    }
+
+    const group = await prisma.group.update({
       where: { id },
-      data: { ...body, updatedAt: new Date() },
+      data: { ...data, updatedAt: new Date() },
+      include: {
+        _count: {
+          select: {
+            todos: true,
+          },
+        },
+      },
     });
-    res.json({ data });
+    res.json({ data: group });
   } catch (error) {
     next(error);
   }
