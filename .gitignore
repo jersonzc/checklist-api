@@ -9,3 +9,4 @@ node_modules/
 
 # Outputs
 dist/
+error.log
