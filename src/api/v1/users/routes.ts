@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as controller from './controller.js';
-import { auth, me } from '../auth.js';
+import { auth, limit, me } from '../auth.js';
 
 export const router = Router();
 
@@ -14,8 +14,8 @@ export const router = Router();
  */
 
 router.route('/').get(controller.all);
-router.route('/signup').post(controller.create);
-router.route('/signin').post(controller.signin);
+router.route('/signup').post(limit, controller.create);
+router.route('/signin').post(limit, controller.signin);
 
 router.param('id', controller.id);
 

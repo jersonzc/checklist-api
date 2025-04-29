@@ -1,5 +1,6 @@
 import { Payload } from '../../types.js';
 import jwt from 'jsonwebtoken';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 import { configuration } from '../../config.js';
 import express from 'express';
@@ -7,6 +8,11 @@ import { StringValue } from 'ms';
 
 const { token } = configuration;
 const { secret, expires } = token;
+
+const limiter = new RateLimiterMemory({
+  points: 5,
+  duration: 1,
+});
 
 export const signToken = (payload: Payload, expiresIn: StringValue = expires) =>
   jwt.sign(payload, secret, {
@@ -83,5 +89,21 @@ export const owner = (
     });
   } else {
     next();
+  }
+};
+
+export const limit = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  try {
+    await limiter.consume(req.ip ? req.ip : '', 1);
+    next();
+  } catch (error) {
+    next({
+      message: 'too many requests',
+      status: 429,
+    });
   }
 };
