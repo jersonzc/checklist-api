@@ -21,7 +21,13 @@ export const create = async (
     const { success, error, data } = await UserSchema.safeParseAsync(body);
 
     const errorMessage = error
-      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
+      ? error?.errors
+          .map((item: ZodIssue) => {
+            const entity = item.path.join('-');
+            const msg = item.message;
+            return `${msg}: ${entity}`;
+          })
+          .join(',')
       : '';
 
     if (!success) {
