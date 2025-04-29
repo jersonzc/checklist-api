@@ -2,7 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
 import { router as api } from '../api/v1/index.js';
-import { logger } from './logger.js';
+import { HTTPLogger, logger } from './logger.js';
 import { ErrorResponse } from '../types.js';
 
 export const app = express();
@@ -19,6 +19,9 @@ app.use(
     next();
   },
 );
+
+// Log HTTP request
+app.use(HTTPLogger);
 
 // Setup API routes
 app.use('/api', api);
