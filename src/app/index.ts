@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = uuidv4();
+    req.id = id;
     res.setHeader('X-Request-Id', id);
     next();
   },
@@ -44,6 +45,7 @@ app.use(
     const data = {
       status,
       message,
+      traceId: req.id,
     };
 
     if (status < 500) {
