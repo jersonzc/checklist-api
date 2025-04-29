@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors';
 
 import { router as api } from '../api/v1/index.js';
 import { HTTPLogger, logger } from './logger.js';
@@ -22,6 +23,13 @@ app.use(
 
 // Log HTTP request
 app.use(HTTPLogger);
+
+// CORS
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+  }),
+);
 
 // Setup API routes
 app.use('/api', api);
