@@ -2,6 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
 import { router as api } from '../api/v1/index.js';
+import { logger } from './logger.js';
 import { ErrorResponse } from '../types.js';
 
 export const app = express();
@@ -39,6 +40,18 @@ app.use(
     next: express.NextFunction,
   ) => {
     const { status = 500, message } = err;
+
+    const data = {
+      status,
+      message,
+    };
+
+    if (status < 500) {
+      logger.warn(data);
+    } else {
+      logger.error(data);
+    }
+
     res.status(status);
     res.json({
       error: { status, message },
