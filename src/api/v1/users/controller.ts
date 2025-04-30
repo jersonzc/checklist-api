@@ -25,9 +25,9 @@ export const create = async (
           .map((item: ZodIssue) => {
             const entity = item.path.join('-');
             const msg = item.message;
-            return `${msg}: ${entity}`;
+            return `[${entity}: ${msg}]`;
           })
-          .join(',')
+          .join(' ')
       : '';
 
     if (!success) {
