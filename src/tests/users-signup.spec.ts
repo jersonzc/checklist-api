@@ -2,6 +2,8 @@ import request from 'supertest';
 
 import { app } from '../app/index.js';
 import { resetDb } from './helpers/reset-db.js';
+import { generateUser } from './fixtures/users.js';
+import { generateTodo } from './fixtures/todos.js';
 
 describe('Users signup', () => {
   beforeEach(async () => {
@@ -10,24 +12,28 @@ describe('Users signup', () => {
 
   test('signin user and create a task', async () => {
     const agent = request(app);
+
+    const { name, email, password } = generateUser();
+    const { title, description, completed, dueDate } = generateTodo();
+
     const body = {
-      name: 'Juanita',
-      email: 'juanita@gmail.com',
-      password: 'Aa123456',
+      name,
+      email,
+      password,
     };
     const signup = await agent.post('/api/users/signup').send(body);
     expect(signup.status).toBe(200);
 
     const signin = await agent.post('/api/users/signin').send({
-      email: body.email,
-      password: body.password,
+      email,
+      password,
     });
     expect(signin.status).toBe(200);
 
     const token = signin.body.meta.token;
     const todo = await agent
       .post('/api/todos')
-      .send({ title: 'Buy milk' })
+      .send({ title, description, completed, dueDate })
       .set('Authorization', `Bearer ${token}`);
     expect(todo.status).toBe(200);
 
