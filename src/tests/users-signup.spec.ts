@@ -8,7 +8,7 @@ describe('Users signup', () => {
     await resetDb();
   });
 
-  test('signed in successfully', async () => {
+  test('signin user and create a task', async () => {
     const agent = request(app);
     const body = {
       name: 'Juanita',
@@ -23,5 +23,19 @@ describe('Users signup', () => {
       password: body.password,
     });
     expect(signin.status).toBe(200);
+
+    const token = signin.body.meta.token;
+    const todo = await agent
+      .post('/api/todos')
+      .send({ title: 'Buy milk' })
+      .set('Authorization', `Bearer ${token}`);
+    expect(todo.status).toBe(200);
+
+    const { id } = todo.body.data;
+    const myTodo = await agent.get(`/api/todos/${id}`);
+    expect(myTodo.status).toBe(200);
+
+    const todos = await agent.get(`/api/todos`);
+    expect(todos.status).toBe(200);
   });
 });
