@@ -6,6 +6,7 @@ export const GroupSchema = z
     title: z
       .string()
       .trim()
+      .min(1)
       .transform((value) => validator.escape(value)),
   })
   .strict();
