@@ -1,6 +1,10 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
-import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
+import {
+  parsePaginationParams,
+  parseSortParams,
+  parseZodError,
+} from '../../../app/utils.js';
 import { fields, TodoSchema } from './model.js';
 import { ZodIssue } from 'zod';
 
@@ -16,9 +20,7 @@ export const create = async (
   try {
     const { success, error, data } = await TodoSchema.safeParseAsync(body);
 
-    const errorMessage = error
-      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
-      : '';
+    const errorMessage = error ? parseZodError(error) : '';
 
     if (!success) {
       return next({
@@ -132,9 +134,7 @@ export const update = async (
     const { success, error, data } =
       await TodoSchema.partial().safeParseAsync(body);
 
-    const errorMessage = error
-      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
-      : '';
+    const errorMessage = error ? parseZodError(error) : '';
 
     if (!success) {
       return next({
