@@ -10,7 +10,8 @@
     "noImplicitAny": true,                               /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     "strictNullChecks": true,                            /* When type checking, take into account 'null' and 'undefined'. */
     "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
-    "types": ["vitest/globals"]                          /* Recognize global APIs. */
+    "types": ["vitest/globals"],                         /* Recognize global APIs. */
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"]
 }
