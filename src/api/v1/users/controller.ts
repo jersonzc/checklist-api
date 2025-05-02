@@ -36,11 +36,13 @@ export const create = async (
       });
     }
 
-    const password = await encryptPassword(body.password);
+    const password = await encryptPassword(data.password);
+
     const user = await prisma.user.create({
       data: { ...data, password },
       select: { name: true, email: true },
     });
+
     res.json({ data: user });
   } catch (error) {
     if (error && error instanceof Prisma.PrismaClientKnownRequestError) {
