@@ -5,9 +5,9 @@ import { auth, limit, me } from '../auth.js';
 export const router = Router();
 
 /*
+ * /api/users/ GET - Read all
  * /api/users/signup POST - Create
  * /api/users/signin POST - Login
- * /api/users/ GET - Read all
  * /api/users/:id GET - Read one
  * /api/users/:id PUT - Update
  * /api/users/:id DELETE - Delete
