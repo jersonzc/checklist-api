@@ -99,6 +99,7 @@ export const id = async (
   try {
     const data = await prisma.user.findUnique({
       where: { id },
+      select: { id: true, name: true, email: true },
     });
     if (data === null) {
       return next({
