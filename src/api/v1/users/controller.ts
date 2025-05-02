@@ -150,11 +150,16 @@ export const update = async (
       });
     }
 
+    if (data && data.password) {
+      data.password = await encryptPassword(data.password);
+    }
+
     const user = await prisma.user.update({
       where: { id },
       data: { ...data, updatedAt: new Date() },
       select: { name: true, email: true },
     });
+
     res.json({ data: user });
   } catch (error) {
     if (error && error instanceof Prisma.PrismaClientKnownRequestError) {
