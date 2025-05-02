@@ -17,10 +17,10 @@ export const LoginSchema = z
 export const UserSchema = PersonSchema.merge(LoginSchema);
 
 export const fields = [
-  'id',
   'createdAt',
   'updatedAt',
-  ...Object.keys(UserSchema.shape),
+  ...Object.keys(PersonSchema.shape),
+  'email',
 ];
 
 export const encryptPassword = (password: string) => {
