@@ -1,5 +1,5 @@
 import { configuration } from '../config.js';
-import { ZodError, ZodIssue } from 'zod';
+import { ZodError, ZodIssue, ZodIssueCode } from 'zod';
 
 const { pagination, order } = configuration;
 
@@ -38,8 +38,17 @@ export const parseSortParams = ({
 export const parseZodError = (error: ZodError): string =>
   error.errors
     .map((item: ZodIssue) => {
-      const entity = item.path.join('-');
-      const msg = item.message;
+      let entity = '';
+      let msg = '';
+      switch (item.code) {
+        case ZodIssueCode.unrecognized_keys:
+          entity = item.keys.join('-');
+          msg = 'unrecognized field';
+          break;
+        default:
+          entity = item.path.join('-');
+          msg = item.message;
+      }
       return `[${entity}: ${msg}]`;
     })
     .join(' ');
