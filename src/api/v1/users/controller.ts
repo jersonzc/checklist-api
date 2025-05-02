@@ -10,6 +10,8 @@ import {
 } from './model.js';
 import { signToken } from '../auth.js';
 import { ZodIssue } from 'zod';
+import { Prisma } from '@prisma/client';
+import { PRISMA_ERRORS } from '../../../app/errors.js';
 
 export const create = async (
   req: express.Request,
@@ -45,6 +47,10 @@ export const create = async (
     });
     res.json({ data: user });
   } catch (error) {
+    if (error && error instanceof Prisma.PrismaClientKnownRequestError) {
+      const output = error.meta?.target as string[];
+      error.message = PRISMA_ERRORS[error.code](output.join(','));
+    }
     next(error);
   }
 };
