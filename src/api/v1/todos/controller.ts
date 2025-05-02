@@ -13,7 +13,8 @@ export const create = async (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  const { body = {} } = req;
+  const { body = {}, params = {} } = req;
+  const { groupId } = params;
   const { locals = {} } = res;
   const { decoded = {} } = locals;
   const { id: userId } = decoded;
@@ -29,7 +30,9 @@ export const create = async (
       });
     }
 
-    const todo = await prisma.todo.create({ data: { ...data, userId } });
+    const todo = await prisma.todo.create({
+      data: { ...data, userId, groupId },
+    });
     res.json({ data: todo });
   } catch (error) {
     next(error);
