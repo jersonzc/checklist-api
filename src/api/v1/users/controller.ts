@@ -215,7 +215,7 @@ export const signin = async (
     if (!user) {
       return next({
         status: 404,
-        message: 'invalid email',
+        message: 'invalid email or password',
       });
     }
 
@@ -223,7 +223,7 @@ export const signin = async (
     if (!passwordMatch) {
       return next({
         status: 404, // we use 404 to avoid confirming the existence of a user
-        message: 'invalid password',
+        message: 'invalid email or password',
       });
     }
 
