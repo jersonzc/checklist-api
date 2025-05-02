@@ -1,6 +1,10 @@
 import express from 'express';
 import { prisma } from '../../../app/database.js';
-import { parsePaginationParams, parseSortParams } from '../../../app/utils.js';
+import {
+  parsePaginationParams,
+  parseSortParams,
+  parseZodError,
+} from '../../../app/utils.js';
 import {
   encryptPassword,
   fields,
@@ -22,15 +26,7 @@ export const create = async (
   try {
     const { success, error, data } = await UserSchema.safeParseAsync(body);
 
-    const errorMessage = error
-      ? error?.errors
-          .map((item: ZodIssue) => {
-            const entity = item.path.join('-');
-            const msg = item.message;
-            return `[${entity}: ${msg}]`;
-          })
-          .join(' ')
-      : '';
+    const errorMessage = error ? parseZodError(error) : '';
 
     if (!success) {
       return next({
@@ -194,9 +190,7 @@ export const signin = async (
   try {
     const { success, error, data } = await LoginSchema.safeParseAsync(body);
 
-    const errorMessage = error
-      ? error?.errors.map((item: ZodIssue) => item.message).join(',')
-      : '';
+    const errorMessage = error ? parseZodError(error) : '';
 
     if (!success) {
       return next({

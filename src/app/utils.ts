@@ -1,4 +1,5 @@
 import { configuration } from '../config.js';
+import { ZodError, ZodIssue } from 'zod';
 
 const { pagination, order } = configuration;
 
@@ -33,3 +34,12 @@ export const parseSortParams = ({
   orderBy: fields.includes(orderBy) ? orderBy : order.orderBy,
   direction: order.options.includes(direction) ? direction : order.direction,
 });
+
+export const parseZodError = (error: ZodError): string =>
+  error.errors
+    .map((item: ZodIssue) => {
+      const entity = item.path.join('-');
+      const msg = item.message;
+      return `[${entity}: ${msg}]`;
+    })
+    .join(' ');
