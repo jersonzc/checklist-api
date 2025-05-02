@@ -155,6 +155,10 @@ export const update = async (
     });
     res.json({ data: user });
   } catch (error) {
+    if (error && error instanceof Prisma.PrismaClientKnownRequestError) {
+      const output = error.meta?.target as string[];
+      error.message = PRISMA_ERRORS[error.code](output.join(','));
+    }
     next(error);
   }
 };
