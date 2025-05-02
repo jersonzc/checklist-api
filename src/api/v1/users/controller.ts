@@ -138,7 +138,6 @@ export const update = async (
     const { success, error, data } =
       await UserSchema.partial().safeParseAsync(body);
 
-    console.log(error);
     const errorMessage = error
       ? error?.errors.map((item: ZodIssue) => item.message).join(',')
       : '';
