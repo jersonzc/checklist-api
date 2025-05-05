@@ -2,7 +2,9 @@
   "paths": {
     "/todos/": {
       "get": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Get all todos",
         "parameters": [
           {
@@ -63,7 +65,9 @@
         }
       },
       "post": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Create a todo",
         "security": [
           {
@@ -109,7 +113,9 @@
     },
     "/todos/{todoId}": {
       "get": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Get one todo by Id",
         "parameters": [
           {
@@ -140,8 +146,21 @@
         }
       },
       "put": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Update a todo",
+        "parameters": [
+          {
+            "name": "todoId",
+            "in": "path",
+            "description": "Id of the Todo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "BearerAuth": []
@@ -184,8 +203,21 @@
         }
       },
       "delete": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Delete a todo",
+        "parameters": [
+          {
+            "name": "todoId",
+            "in": "path",
+            "description": "Id of the Todo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "BearerAuth": []

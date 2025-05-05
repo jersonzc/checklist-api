@@ -2,7 +2,9 @@
   "paths": {
     "/users/": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "description": "Get all users",
         "parameters": [
           {
@@ -75,7 +77,9 @@
     },
     "/users/signup": {
       "post": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "description": "Sign up a user",
         "requestBody": {
           "content": {
@@ -116,7 +120,9 @@
     },
     "/users/signin": {
       "post": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "description": "Sign in a user",
         "requestBody": {
           "content": {
@@ -166,7 +172,9 @@
     },
     "/users/{UserId}": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "description": "Get one User by Id",
         "security": [
           {
@@ -216,8 +224,21 @@
         }
       },
       "put": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "description": "Update a User",
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "path",
+            "description": "Id of the User",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "BearerAuth": []
@@ -269,8 +290,21 @@
         }
       },
       "delete": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "description": "Delete a User",
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "path",
+            "description": "Id of the User",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "BearerAuth": []

@@ -2,7 +2,9 @@
   "paths": {
     "/groups/": {
       "get": {
-        "tags": ["groups"],
+        "tags": [
+          "groups"
+        ],
         "description": "Get all groups",
         "parameters": [
           {
@@ -63,7 +65,9 @@
         }
       },
       "post": {
-        "tags": ["groups"],
+        "tags": [
+          "groups"
+        ],
         "description": "Create a group",
         "security": [
           {
@@ -109,7 +113,9 @@
     },
     "/groups/{groupId}": {
       "get": {
-        "tags": ["groups"],
+        "tags": [
+          "groups"
+        ],
         "description": "Get one group by Id",
         "parameters": [
           {
@@ -140,8 +146,21 @@
         }
       },
       "put": {
-        "tags": ["groups"],
+        "tags": [
+          "groups"
+        ],
         "description": "Update a group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Id of the Group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "BearerAuth": []
@@ -184,8 +203,21 @@
         }
       },
       "delete": {
-        "tags": ["groups"],
+        "tags": [
+          "groups"
+        ],
         "description": "Delete a group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Id of the Group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "security": [
           {
             "BearerAuth": []
@@ -209,7 +241,9 @@
     },
     "/groups/{groupId}/todos": {
       "get": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Get all todos grom group",
         "parameters": [
           {
@@ -279,7 +313,9 @@
         }
       },
       "post": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "description": "Create a todo linked to a group",
         "parameters": [
           {
