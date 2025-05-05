@@ -206,6 +206,133 @@
           }
         }
       }
+    },
+    "/groups/{groupId}/todos": {
+      "get": {
+        "tags": ["todos"],
+        "description": "Get all todos grom group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Id of the Group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of documents to return."
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of documents to skip."
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Field to order by."
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sort order (asc/desc)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Todo"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Meta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["todos"],
+        "description": "Create a todo linked to a group",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Id of the Group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Todo"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
