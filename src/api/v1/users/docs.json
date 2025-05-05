@@ -168,6 +168,11 @@
       "get": {
         "tags": ["users"],
         "description": "Get one User by Id",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "UserId",
