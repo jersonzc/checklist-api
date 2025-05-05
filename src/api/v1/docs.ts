@@ -1,4 +1,5 @@
 import merge from 'lodash/merge.js';
+import users from './users/docs.json' with { type: 'json' };
 import todos from './todos/docs.json' with { type: 'json' };
 import groups from './groups/docs.json' with { type: 'json' };
 
@@ -16,6 +17,10 @@ export const swaggerDefinition = merge(
     ],
     tags: [
       {
+        name: "users",
+        description: "Create users",
+      },
+      {
         name: "todos",
         description: "Create todos",
       },
@@ -25,6 +30,7 @@ export const swaggerDefinition = merge(
       }
     ]
   },
+  users,
   todos,
   groups,
 );

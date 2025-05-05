@@ -1,0 +1,394 @@
+{
+  "paths": {
+    "/users/": {
+      "get": {
+        "tags": ["users"],
+        "description": "Get all users",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of documents to return."
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of documents to skip."
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Field to order by."
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sort order (asc/desc)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "42fd00a4-9836-4e0d-99e3-308c4231663c"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "Jerson Z."
+                          }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Meta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/signup": {
+      "post": {
+        "tags": ["users"],
+        "description": "Sign up a user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Jerson Z."
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "jerson@gmail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/signin": {
+      "post": {
+        "tags": ["users"],
+        "description": "Sign in a user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Jerson Z."
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "jerson@gmail.com"
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "{{token}}"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{UserId}": {
+      "get": {
+        "tags": ["users"],
+        "description": "Get one User by Id",
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "path",
+            "description": "Id of the User",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "e6476647-475b-45f8-92a5-40edb3649505"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Marcelo"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "marcelo@gmail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["users"],
+        "description": "Update a User",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Jaimito"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "hola@gmail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "description": "Delete a User",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "apiKey",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "UnauthorizedError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "unauthorized"
+              },
+              "status": {
+                "type": "integer",
+                "example": "401"
+              }
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jaimito"
+          },
+          "email": {
+            "type": "string",
+            "example": "hola@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Aa123456"
+          }
+        }
+      },
+      "UserCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jerson Z."
+          },
+          "email": {
+            "type": "string",
+            "example": "jerson@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Aa123456"
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "jerson@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Aa123456"
+          }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": 10
+          },
+          "offset": {
+            "type": "integer",
+            "example": 0
+          },
+          "total": {
+            "type": "integer",
+            "example": 34
+          },
+          "orderBy": {
+            "type": "string",
+            "example": "name"
+          },
+          "direction": {
+            "type": "string",
+            "example": "desc"
+          }
+        }
+      }
+    }
+  }
+}
