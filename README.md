@@ -1,10 +1,10 @@
 ## Checklist API
 
 ### Play
-
 ```sh
 docker-compose up --build
 ```
+The Swagger documentation is located at [http://localhost:{{PORT}}/api/v1/docs/](http://localhost:{{PORT}}/api/v1/docs/)
 
 ### Install
 Copy the `.env.example` file to `.env` to set up environment variables.
