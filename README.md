@@ -4,7 +4,7 @@
 
 ```sh
 docker-compose up --build
-``
+```
 
 ### Install
 Copy the `.env.example` file to `.env` to set up environment variables.
