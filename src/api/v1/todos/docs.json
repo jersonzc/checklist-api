@@ -3,6 +3,40 @@
     "/todos/": {
       "get": {
         "description": "Get all todos",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of documents to return."
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Number of documents to skip."
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Field to order by."
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sort order (asc/desc)."
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -15,6 +49,10 @@
                       "items": {
                         "$ref": "#/components/schemas/Todo"
                       }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Meta"
                     }
                   }
                 }
@@ -192,6 +230,31 @@
             "type": "string",
             "format": "date-time",
             "example": "2023-09-05T03:30:46.150Z"
+          }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "example": 10
+          },
+          "offset": {
+            "type": "integer",
+            "example": 0
+          },
+          "total": {
+            "type": "integer",
+            "example": 34
+          },
+          "orderBy": {
+            "type": "string",
+            "example": "createdAt"
+          },
+          "direction": {
+            "type": "string",
+            "example": "desc"
           }
         }
       }
