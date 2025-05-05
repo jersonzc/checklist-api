@@ -18,15 +18,15 @@ export const swaggerDefinition = merge(
     tags: [
       {
         name: "users",
-        description: "Create users",
+        description: "Create and list users",
       },
       {
         name: "todos",
-        description: "Create todos",
+        description: "Create and list todos",
       },
       {
         name: "groups",
-        description: "Create groups",
+        description: "Create and list groups",
       }
     ]
   },
