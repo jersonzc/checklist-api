@@ -153,10 +153,6 @@
             "format": "date-time",
             "example": "2023-09-05T03:30:46.150Z"
           },
-          "userId": {
-            "type": "string",
-            "example": "e6476647-475b-45f8-92a5-40edb3649505"
-          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -166,6 +162,14 @@
             "type": "string",
             "format": "date-time",
             "example": "2023-08-11T03:30:46.150Z"
+          },
+          "userId": {
+            "type": "string",
+            "example": "e6476647-475b-45f8-92a5-40edb3649505"
+          },
+          "groupId": {
+            "type": "string",
+            "example": "42fd00a4-9836-4e0d-99e3-308c4231663c"
           }
         }
       },
